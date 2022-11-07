@@ -6,7 +6,7 @@
 /*   By: hmeftah <hmeftah@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 19:04:48 by hmeftah           #+#    #+#             */
-/*   Updated: 2022/11/07 20:27:22 by hmeftah          ###   ########.fr       */
+/*   Updated: 2022/11/07 20:46:12 by hmeftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,36 +66,12 @@ char	*update_buffer(char *tempbuffer)
 	return (newbuffer);
 }
 
-// int	read_and_append_to_temp_buffer(
-// 	int fd, char *buffer, char *tempbuffer, char *line)
-// {
-// 	int	bytesread;
-
-// 	bytesread = read(fd, buffer, BUFFER_SIZE);
-// 	if (bytesread == -1)
-// 	{
-// 		free (tempbuffer);
-// 		tempbuffer = NULL;
-// 		free (line);
-// 		line = NULL;
-// 		return (bytesread);
-// 	}
-// 	buffer[bytesread] = '\0';
-// 	tempbuffer = ft_joinstring(tempbuffer, buffer);
-// 	return (bytesread);
-// }
-
-char	*get_next_line(int fd)
+char	*read_and_update_tempbuffer(
+	int fd, char *buffer, char *tempbuffer, char *line)
 {
-	char		buffer[BUFFER_SIZE + 1];
 	int			bytesread;
-	static char	*tempbuffer;
-	char		*line;
 
 	bytesread = 1;
-	line = NULL;
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
 	while (bytesread > 0 && !ft_lookforchar(tempbuffer, '\n'))
 	{
 		bytesread = read(fd, buffer, BUFFER_SIZE);
@@ -110,12 +86,29 @@ char	*get_next_line(int fd)
 		buffer[bytesread] = '\0';
 		tempbuffer = ft_joinstring(tempbuffer, buffer);
 	}
+	return (tempbuffer);
+}
+
+char	*get_next_line(int fd)
+{
+	char		buffer[BUFFER_SIZE + 1];
+	static char	*tempbuffer;
+	char		*line;
+
+	line = NULL;
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	tempbuffer = read_and_update_tempbuffer(fd, buffer, tempbuffer, line);
+	if (!(tempbuffer))
+		return (0);
 	if (tempbuffer[0] == '\0')
 	{
-		free(tempbuffer);
+		free (tempbuffer);
 		tempbuffer = NULL;
+		free (line);
+		line = NULL;
 		return (0);
-	}	
+	}
 	line = cut_line(tempbuffer, line);
 	tempbuffer = update_buffer(tempbuffer);
 	return (line);

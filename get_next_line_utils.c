@@ -6,7 +6,7 @@
 /*   By: hmeftah <hmeftah@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 19:04:54 by hmeftah           #+#    #+#             */
-/*   Updated: 2022/11/07 01:04:46 by hmeftah          ###   ########.fr       */
+/*   Updated: 2022/11/07 20:46:24 by hmeftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ char	*ft_joinstring(char *updatedbuffer, char *originalbuffer)
 	i = 0;
 	j = 0;
 	newstring = NULL;
-	// if (!originalbuffer)
-	// 	return (newstring);
 	if (!updatedbuffer)
 		updatedbuffer = ft_strdup("");
 	newstring = (char *)malloc(
